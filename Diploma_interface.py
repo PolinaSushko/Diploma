@@ -87,8 +87,8 @@ class App(Frame):
         master.geometry(f"1140x720+198+37")
         #master.resizable(width = False, height = False)
         master.resizable(width = True, height = True)
-        master.iconphoto(False, PhotoImage(file = "E:/Work Folder/0_Polya/ДТЕУ/Дипломна робота/interface_icon.jpg"))
-
+        #master.iconphoto(False, PhotoImage(file = "E:/Work Folder/0_Polya/ДТЕУ/Дипломна робота/interface_icon.jpg"))
+        master.iconphoto(False, PhotoImage(file = "E:/Work Folder/0_Polya/ДТЕУ/Дипломна робота/Diploma/interface_icon.jpg"))
 
     def get_frame_size(self, frame):
         width  = frame.winfo_width()

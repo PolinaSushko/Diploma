@@ -887,7 +887,7 @@ class Classifier:
 
         return annotated_img, resulted_chars, median_accuracy
 
-
+"""
 h_margin_error      = 0.15
 w_margin_error      = 0.15
 GaussianBlur_ksize  = (1, 3)
@@ -910,4 +910,4 @@ print(r_chars)
 cv2.imshow("Detected and Recognized Characters", recognized_img)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
-
+"""

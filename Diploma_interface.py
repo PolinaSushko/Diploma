@@ -295,7 +295,7 @@ class App(Frame):
         morph_ksize           = eval(self.morph_ksize_entry.get())
         show_prep_img         = self.show_prep_var.get()
 
-        model_path = 'best_model_pool_2_30.keras'
+        model_path = 'model_improved.keras'
 
         # Load image
         pil_image = Image.open(self.filename)

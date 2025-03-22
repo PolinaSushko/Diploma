@@ -7,7 +7,8 @@ import cv2
 import matplotlib.pyplot as plt
 from PIL import ImageFont, ImageDraw, Image
 
-MODEL_PATH    = 'best_model_pool_2_30.keras'
+#MODEL_PATH    = 'best_model_pool_2_30.keras'
+MODEL_PATH    = 'model_improved.keras'
 EX_IM_PATH_1  = 'test_img/test_1.jpg'
 EX_IM_PATH_2  = 'test_img/test_2.jpg'
 EX_IM_PATH_3  = 'test_img/test_3.jpg'

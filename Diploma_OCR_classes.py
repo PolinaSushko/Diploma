@@ -21,6 +21,7 @@ EX_IM_PATH_9  = 'test_img/test_9.jpg'
 EX_IM_PATH_10 = 'test_img/test_10.jpg'
 EX_IM_PATH_11 = 'test_img/test_11.jpg'
 EX_IM_PATH_12 = 'test_img/test_12.jpg'
+EX_IM_PATH_15 = 'test_img/test_15.jpg'
 
 # Load image
 image = cv2.imread(EX_IM_PATH_4)
@@ -887,6 +888,36 @@ class Classifier:
         median_accuracy = np.median(accuracy_list)
 
         return annotated_img, resulted_chars, median_accuracy
+    
+    def recognize_single_character(self, image, contour):
+        if self.model is None:
+            self.model = load_model(self.model_path, compile = False)
+            
+        x, y, w, h = contour
+    
+        # Extract the character (if contour is provided, but for single char, use the whole image)
+        char_img = image[0]  # Since image is already batched (1, 64, 64, 1), take the first (and only) image
+
+        # Resize to 64x64 (already done in preprocess, but ensure consistency)
+        char_img_resized = char_img.reshape(64, 64)  # Remove batch and channel for resizing if needed
+
+        # Normalize (already normalized)
+        char_img_norm = char_img_resized.astype('float32') / 255.0
+
+        # Reshape for model input
+        char_img_input = char_img_norm.reshape(1, 64, 64, 1)
+
+        # Predict
+        predictions = self.model.predict(char_img_input)
+
+        # Get the predicted class and confidence
+        predicted_class = np.argmax(predictions[0])
+        confidence = float(predictions[0][predicted_class])
+
+        # Map to character using character_dict
+        character = self.character_dict[predicted_class]
+
+        return predicted_class, character, confidence
 
 """
 h_margin_error      = 0.15

@@ -892,20 +892,17 @@ class Classifier:
     def recognize_single_character(self, image, contour):
         if self.model is None:
             self.model = load_model(self.model_path, compile = False)
-            
-        x, y, w, h = contour
-    
-        # Extract the character (if contour is provided, but for single char, use the whole image)
-        char_img = image[0]  # Since image is already batched (1, 64, 64, 1), take the first (and only) image
 
-        # Resize to 64x64 (already done in preprocess, but ensure consistency)
-        char_img_resized = char_img.reshape(64, 64)  # Remove batch and channel for resizing if needed
-
-        # Normalize (already normalized)
-        char_img_norm = char_img_resized.astype('float32') / 255.0
-
-        # Reshape for model input
-        char_img_input = char_img_norm.reshape(1, 64, 64, 1)
+        # Use the provided image directly
+        # Make sure image is in the right shape (1, 64, 64, 1)
+        if len(image.shape) == 4:
+            char_img_input = image  # Already in the right shape
+        elif len(image.shape) == 3:
+            char_img_input = image.reshape(1, image.shape[0], image.shape[1], 1)
+        elif len(image.shape) == 2:
+            char_img_input = image.reshape(1, image.shape[0], image.shape[1], 1)
+        else:
+            raise ValueError("Unexpected image shape")
 
         # Predict
         predictions = self.model.predict(char_img_input)

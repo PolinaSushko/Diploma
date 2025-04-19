@@ -558,19 +558,15 @@ class SingleCharApp(Frame):
 
     def recognize_char(self):
         # Preprocess the drawn or loaded image
-        processed_img = self.image_numpy.copy()  # Ensure we work with a copy
+        processed_img = self.image_numpy.copy()  
 
         # Convert to uint8 if it's not already (normalize to 0-255)
         if processed_img.dtype != np.uint8:
             processed_img = (processed_img * 255).astype(np.uint8)
 
-        # Ensure the image is grayscale (1 channel)
+        # Ensure the image is grayscale 
         if len(processed_img.shape) == 3 and processed_img.shape[2] == 3:
             processed_img = cv2.cvtColor(processed_img, cv2.COLOR_BGR2GRAY)
-        elif len(processed_img.shape) == 2:
-            processed_img = processed_img  # Already grayscale, no conversion needed
-        else:
-            raise ValueError("Unexpected image shape")
 
         # Resize to 64x64
         processed_img = cv2.resize(processed_img, (64, 64))
@@ -584,8 +580,8 @@ class SingleCharApp(Frame):
         # Since we don't have a contour in this context, we'll simulate one (assuming the entire image is the character)
         dummy_contour = [0, 0, 64, 64]  # x, y, w, h covering the whole image
 
-        # Create a Classifier instance (you might need to adjust this based on your Classifier class)
-        classifier = Classifier(self.model_path, char_img_input, [dummy_contour], character_dict, char_img_input, True)
+        # Create a Classifier instance 
+        classifier = Classifier(self.model_path, None, None, character_dict, None, True)
 
         # Call the single character recognition method
         predicted_class, character, confidence = classifier.recognize_single_character(char_img_input, dummy_contour)

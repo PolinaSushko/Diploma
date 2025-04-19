@@ -2,28 +2,25 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
 import numpy as np
-import PIL
 from PIL import Image, ImageTk
 import cv2
 from Diploma_OCR_classes import CharacterDetector, Classifier
 
-character_dict = {0: '一', 1: '七', 2: '三', 3: '上', 4: '下', 5: '不', 6: '东', 7: '么', 8: '九', 9: '习', 10: '书', 11: '买', 
-                  12: '了', 13: '二', 14: '五', 15: '些', 16: '亮', 17: '人', 18: '什', 19: '今', 20: '他', 21: '们', 22: '会', 
-                  23: '住', 24: '作', 25: '你', 26: '候', 27: '做', 28: '儿', 29: '先', 30: '八', 31: '六', 32: '关', 33: '兴', 
-                  34: '再', 35: '写', 36: '冷', 37: '几', 38: '出', 39: '分', 40: '前', 41: '北', 42: '医', 43: '十', 44: '午', 
-                  45: '去', 46: '友', 47: '吃', 48: '同', 49: '名', 50: '后', 51: '吗', 52: '呢', 53: '和', 54: '哪', 55: '商', 
-                  56: '喂', 57: '喜', 58: '喝', 59: '四', 60: '回', 61: '国', 62: '在', 63: '坐', 64: '块', 65: '多', 66: '大', 
-                  67: '天', 68: '太', 69: '她', 70: '好', 71: '妈', 72: '姐', 73: '子', 74: '字', 75: '学', 76: '客', 77: '家', 
-                  78: '对', 79: '小', 80: '少', 81: '岁', 82: '工', 83: '师', 84: '年', 85: '店', 86: '开', 87: '影', 88: '很', 
-                  89: '怎', 90: '想', 91: '我', 92: '打', 93: '日', 94: '时', 95: '明', 96: '星', 97: '昨', 98: '是', 99: '月', 
-                  100: '有', 101: '朋', 102: '服', 103: '期', 104: '本', 105: '机', 106: '来', 107: '杯', 108: '果', 109: '校', 
-                  110: '样', 111: '桌', 112: '椅', 113: '欢', 114: '气', 115: '水', 116: '汉', 117: '没', 118: '漂', 119: '火', 
-                  120: '点', 121: '热', 122: '爱', 123: '爸', 124: '狗', 125: '猫', 126: '现', 127: '生', 128: '电', 129: '的',
-                  130: '看', 131: '睡', 132: '租', 133: '站', 134: '米', 135: '系', 136: '老', 137: '能', 138: '脑', 139: '苹', 
-                  140: '茶', 141: '菜', 142: '衣', 143: '西', 144: '见', 145: '视', 146: '觉', 147: '认', 148: '识', 149: '话', 
-                  150: '语', 151: '说', 152: '请', 153: '读', 154: '谁', 155: '谢', 156: '起', 157: '车', 158: '这', 159: '那', 
-                  160: '都', 161: '里', 162: '钟', 163: '钱', 164: '院', 165: '雨', 166: '零', 167: '面', 168: '飞', 169: '饭', 
-                  170: '馆', 171: '高'}
+character_dict = {0: '一', 1: '七', 2: '三', 3: '上', 4: '下', 5: '不', 6: '东', 7: '么', 8: '九', 9: '习', 10: '书', 11: '买', 12: '了', 
+                  13: '二', 14: '五', 15: '些', 16: '亮', 17: '人', 18: '什', 19: '今', 20: '他', 21: '们', 22: '会', 23: '住', 24: '作', 
+                  25: '你', 26: '候', 27: '做', 28: '儿', 29: '先', 30: '八', 31: '六', 32: '关', 33: '兴', 34: '再', 35: '写', 36: '冷', 
+                  37: '几', 38: '出', 39: '分', 40: '前', 41: '北', 42: '医', 43: '十', 44: '午', 45: '去', 46: '友', 47: '吃', 48: '同', 
+                  49: '名', 50: '后', 51: '吗', 52: '呢', 53: '和', 54: '哪', 55: '商', 56: '喂', 57: '喜', 58: '喝', 59: '四', 60: '回', 
+                  61: '国', 62: '在', 63: '坐', 64: '块', 65: '多', 66: '大', 67: '天', 68: '太', 69: '她', 70: '好', 71: '妈', 72: '姐', 
+                  73: '子', 74: '字', 75: '学', 76: '客', 77: '家', 78: '对', 79: '小', 80: '少', 81: '岁', 82: '工', 83: '师', 84: '年', 
+                  85: '店', 86: '开', 87: '影', 88: '很', 89: '怎', 90: '想', 91: '我', 92: '打', 93: '日', 94: '时', 95: '明', 96: '星', 
+                  97: '昨', 98: '是', 99: '月', 100: '有', 101: '朋', 102: '服', 103: '期', 104: '本', 105: '机', 106: '来', 107: '杯', 
+                  108: '果', 109: '校', 110: '样', 111: '桌', 112: '椅', 113: '欢', 114: '气', 115: '水', 116: '汉', 117: '没', 118: '漂', 
+                  119: '火', 120: '点', 121: '热', 122: '爱', 123: '爸', 124: '狗', 125: '猫', 126: '现', 127: '生', 128: '电', 129: '的',
+                  130: '看', 131: '睡', 132: '租', 133: '站', 134: '米', 135: '系', 136: '老', 137: '能', 138: '脑', 139: '苹', 140: '茶', 
+                  141: '菜', 142: '衣', 143: '西', 144: '见', 145: '视', 146: '觉', 147: '认', 148: '识', 149: '话', 150: '语', 151: '说', 
+                  152: '请', 153: '读', 154: '谁', 155: '谢', 156: '起', 157: '车', 158: '这', 159: '那', 160: '都', 161: '里', 162: '钟', 
+                  163: '钱', 164: '院', 165: '雨', 166: '零', 167: '面', 168: '飞', 169: '饭', 170: '馆', 171: '高'}
 
 class ToolTip:
     def __init__(self, widget, text):
@@ -165,7 +162,6 @@ class App(Frame):
         master.geometry(f"1140x720+198+37")
         #master.resizable(width = False, height = False)
         master.resizable(width = True, height = True)
-        #master.iconphoto(False, PhotoImage(file = "E:/Work Folder/0_Polya/ДТЕУ/Дипломна робота/interface_icon.jpg"))
         master.iconphoto(False, PhotoImage(file = "E:/Work Folder/0_Polya/ДТЕУ/Дипломна робота/Diploma/interface_icon.jpg"))
 
     def get_frame_size(self, frame):
@@ -206,7 +202,7 @@ class App(Frame):
         self.w_margin_er_entry         = ttk.Entry(self.w_margin_er_frame, textvariable = self.W_MARGIN_ERROR, font = ("default", (14)), width = 5)
         self.GaussianBlur_sigmaX_entry = ttk.Entry(self.GaussianBlur_sigmaX_frame, textvariable = self.GAUSSIANBLUR_SIGMAX, font = ("default", (14)), width = 5)
         self.GaussianBlur_ksize_entry  = ttk.Entry(self.GaussianBlur_ksize_frame, textvariable = self.GAUSSIANBLUR_KSIZE, font = ("default", (14)), width = 5)
-        self.morph_ksize_entry  = ttk.Entry(self.morph_ksize_frame, textvariable = self.MORPH_KSIZE, font = ("default", (14)), width = 5)
+        self.morph_ksize_entry         = ttk.Entry(self.morph_ksize_frame, textvariable = self.MORPH_KSIZE, font = ("default", (14)), width = 5)
 
     def create_labels(self):
         self.show_prep_label             = Label(self.show_prep_container, text = "Показати препроцесинг зображення:", font = 'arial 14')
@@ -237,7 +233,7 @@ class App(Frame):
         style = ttk.Style()
         style.configure('Custom.TCheckbutton', font = 'arial 14', foreground = 'black')
 
-        self.show_prep_var = BooleanVar()
+        self.show_prep_var      = BooleanVar()
         self.show_prep_checkbox = ttk.Checkbutton(self.show_prep_container, variable = self.show_prep_var, onvalue = True, offvalue = False, 
                                                   text = 'так', style = 'Custom.TCheckbutton')
 
@@ -359,11 +355,6 @@ class App(Frame):
 
     def recognize_text(self):
         # Values for the parameters
-        #h_margin_error      = 0.15
-        #w_margin_error      = 0.15
-        #GaussianBlur_sigmaX = 0
-        #GaussianBlur_ksize  = (1, 3)
-        #morph_ksize         = (2, 2)
         show_bounding_boxes   = self.show_bounding_boxes_var.get()
         show_recodnized_chars = self.show_recodnized_chars_var.get()
         h_margin_error        = float(self.h_margin_er_entry.get())
@@ -377,7 +368,7 @@ class App(Frame):
 
         # Load image
         pil_image = Image.open(self.filename)
-        image = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
+        image     = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
 
         character_detector = CharacterDetector(show_bounding_boxes, h_margin_error, w_margin_error, GaussianBlur_ksize, GaussianBlur_sigmaX, morph_ksize)
 
@@ -469,33 +460,33 @@ class SingleCharApp(Frame):
 
         master.title("Розпізнавання одного ієрогліфа")
         master.geometry("570x360+475+150")
-        master.resizable(width=False, height=False)
-        master.iconphoto(False, PhotoImage(file="E:/Work Folder/0_Polya/ДТЕУ/Дипломна робота/Diploma/interface_icon.jpg"))
+        master.resizable(width = False, height = False)
+        master.iconphoto(False, PhotoImage(file = "E:/Work Folder/0_Polya/ДТЕУ/Дипломна робота/Diploma/interface_icon.jpg"))
 
-        canvas_frame = ttk.Frame(master)
-        button_frame = ttk.Frame(master)
-        answer_frame = ttk.Frame(button_frame)
-        self.result = StringVar()
-        self.canvas = Canvas(canvas_frame, width=64*5, height=64*5, background='gray74')  # Scaled up by 5
-        draw_button = ttk.Button(button_frame, text='Написати', width=18, command=self.draw_mode)
-        erase_button = ttk.Button(button_frame, text='Стерти', width=18, command=self.erase_mode)
-        clear_button = ttk.Button(button_frame, text='Очистити екран', width=18, command=self.clear_screen)
-        load_button = ttk.Button(button_frame, text='Завантажити картинку', width=18, command=self.load_picture)
-        recognize_button = ttk.Button(button_frame, text='Розпізнати', width=18, command=self.recognize_char)
-        label_result = Label(answer_frame, textvariable=self.result, font='arial 14', background='gray64', width=15, height=2)
+        canvas_frame     = ttk.Frame(master)
+        button_frame     = ttk.Frame(master)
+        answer_frame     = ttk.Frame(button_frame)
+        self.result      = StringVar()
+        self.canvas      = Canvas(canvas_frame, width = 64 * 5, height = 64 * 5, background = 'gray74')  # Scaled up by 5
+        draw_button      = ttk.Button(button_frame, text = 'Написати', width = 18, command = self.draw_mode)
+        erase_button     = ttk.Button(button_frame, text = 'Стерти', width = 18, command = self.erase_mode)
+        clear_button     = ttk.Button(button_frame, text = 'Очистити екран', width = 18, command = self.clear_screen)
+        load_button      = ttk.Button(button_frame, text = 'Завантажити картинку', width = 18, command = self.load_picture)
+        recognize_button = ttk.Button(button_frame, text = 'Розпізнати', width = 18, command = self.recognize_char)
+        label_result     = Label(answer_frame, textvariable = self.result, font = 'arial 14', background = 'gray64', width = 15, height = 2)
 
-        ttk.Style().configure("TButton", padding=(0, 5, 0, 5), font='arial 12')
+        ttk.Style().configure("TButton", padding = (0, 5, 0, 5), font = 'arial 12')
 
-        canvas_frame.grid(row=0, column=0, padx=10, pady=15)
-        self.canvas.pack(side=LEFT)
-        button_frame.grid(row=0, column=1)
-        draw_button.pack(padx=25, pady=10)
-        erase_button.pack(padx=25, pady=10)
-        clear_button.pack(padx=25, pady=10)
-        load_button.pack(padx=25, pady=10)
-        recognize_button.pack(padx=25, pady=10)
-        answer_frame.pack(padx=25, pady=10)
-        label_result.grid(column=0, row=0)
+        canvas_frame.grid(row = 0, column = 0, padx = 10, pady = 15)
+        self.canvas.pack(side = LEFT)
+        button_frame.grid(row = 0, column = 1)
+        draw_button.pack(padx = 25, pady = 10)
+        erase_button.pack(padx = 25, pady = 10)
+        clear_button.pack(padx = 25, pady = 10)
+        load_button.pack(padx = 25, pady = 10)
+        recognize_button.pack(padx = 25, pady = 10)
+        answer_frame.pack(padx = 25, pady = 10)
+        label_result.grid(column = 0, row = 0)
 
         self.canvas_squares = []
         for y in range(64):
@@ -503,7 +494,7 @@ class SingleCharApp(Frame):
             for x in range(64):
                 px = x * 5
                 py = y * 5
-                square = self.canvas.create_rectangle(px, py, px+5, py+5, fill='black')
+                square = self.canvas.create_rectangle(px, py, px + 5, py + 5, fill = 'black')
                 row_squares.append(square)
             self.canvas_squares.append(row_squares)
 
@@ -520,8 +511,8 @@ class SingleCharApp(Frame):
         for y in range(64):
             for x in range(64):
                 square = self.canvas_squares[y][x]
-                self.canvas.itemconfigure(square, fill='black', outline='black')
-        self.image_numpy = np.zeros(shape=(64, 64), dtype=np.uint8)
+                self.canvas.itemconfigure(square, fill = 'black', outline = 'black')
+        self.image_numpy = np.zeros(shape = (64, 64), dtype = np.uint8)
         self.result.set(' ')
 
     def load_picture(self):
@@ -547,7 +538,7 @@ class SingleCharApp(Frame):
         if 0 <= x < 64 and 0 <= y < 64:
             square = self.canvas_squares[y][x]
             color = 'black' if self.IS_ERASE else 'white'
-            self.canvas.itemconfigure(square, fill=color, outline=color)
+            self.canvas.itemconfigure(square, fill = color, outline = color)
             self.image_numpy[y][x] = 0 if self.IS_ERASE else 255
 
     def canvas_mouse_down(self, evt):
@@ -558,19 +549,15 @@ class SingleCharApp(Frame):
 
     def recognize_char(self):
         # Preprocess the drawn or loaded image
-        processed_img = self.image_numpy.copy()  # Ensure we work with a copy
+        processed_img = self.image_numpy.copy()  
 
         # Convert to uint8 if it's not already (normalize to 0-255)
         if processed_img.dtype != np.uint8:
             processed_img = (processed_img * 255).astype(np.uint8)
 
-        # Ensure the image is grayscale (1 channel)
+        # Ensure the image is grayscale 
         if len(processed_img.shape) == 3 and processed_img.shape[2] == 3:
             processed_img = cv2.cvtColor(processed_img, cv2.COLOR_BGR2GRAY)
-        elif len(processed_img.shape) == 2:
-            processed_img = processed_img  # Already grayscale, no conversion needed
-        else:
-            raise ValueError("Unexpected image shape")
 
         # Resize to 64x64
         processed_img = cv2.resize(processed_img, (64, 64))
@@ -581,21 +568,14 @@ class SingleCharApp(Frame):
         # Reshape for model input (add batch and channel dimensions)
         char_img_input = processed_img_norm.reshape(1, 64, 64, 1)
 
-        # Since we don't have a contour in this context, we'll simulate one (assuming the entire image is the character)
-        dummy_contour = [0, 0, 64, 64]  # x, y, w, h covering the whole image
-
-        # Create a Classifier instance (you might need to adjust this based on your Classifier class)
-        classifier = Classifier(self.model_path, char_img_input, [dummy_contour], character_dict, char_img_input, True)
+        # Create a Classifier instance 
+        classifier = Classifier(self.model_path, None, None, character_dict, None, True)
 
         # Call the single character recognition method
-        predicted_class, character, confidence = classifier.recognize_single_character(char_img_input, dummy_contour)
+        predicted_class, character, confidence = classifier.recognize_single_character(char_img_input)
 
         # Update the result
         self.result.set(f'Розпізнано: {character}\nТочність: {confidence:.3f}')
-
-#root = Tk()
-#app  = App(root)
-#app.mainloop()
 
 if __name__ == "__main__":
     main_window = MainWindow()
